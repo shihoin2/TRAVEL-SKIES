@@ -37,7 +37,12 @@ erDiagram
         BIGINT city_id FK
         DATE date
         FLOAT temperature
+        FLOAT temp_min
+        FLOAT tempe_max
+        FLOAT humidity
+        VARCHAR(255) weather
         VARCHAR(255) description
+        VARCHAR(255) weather_icon
         TIMESTAMP created_at
         TIMESTAMP updated_at
     }
