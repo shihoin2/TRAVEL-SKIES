@@ -1,48 +1,50 @@
-# Next.js × Laravel の環境構築
+# TRAVEL SKIES
+<img width="200" src="/Documents/Logo.png">
 
-## 前提
+## データベース構成
+```mermaid
+---
+title: "TRAVEL SKIES"
+---
+erDiagram
+    REGIONS {
+        BIGINT id PK
+        VARCHAR(50) name
+        TEXT description
+    }
 
-- M1Mac対応
-- Intel製チップMacの場合は`.docker/db/Dockerfile`を以下の通り修正
-- Windowsでの動作確認は行っていない
+    PREFECTURES {
+        BIGINT id PK
+        VARCHAR(50) name
+        BIGINT region_id FK
+        VARCHAR(255) image_url
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
 
-```diff
-- FROM --platform=linux/x86_64 mysql:8.0
-+ FROM mysql:8.0
+    CITIES {
+        BIGINT id PK
+        VARCHAR(100) name
+        BIGINT prefecture_id FK
+        FLOAT latitude
+        FLOAT longitude
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
 
-ENV TZ=UTC
+    WEATHERS {
+        BIGINT id PK
+        BIGINT city_id FK
+        DATE date
+        FLOAT temperature
+        VARCHAR(255) description
+        TIMESTAMP created_at
+        TIMESTAMP updated_at
+    }
 
-COPY my.cnf /etc/my.cnf
+    REGIONS ||--o{ PREFECTURES : "has"
+    PREFECTURES ||--o{ CITIES : "has"
+    CITIES ||--o{ WEATHERS : "has"
+
+
 ```
-
-## コンテナ起動
-
-```sh
-docker-compose up -d --build
-```
-
-## Laravelインストール
-
-```sh
-docker-compose exec api composer create-project laravel/laravel .
-```
-
-`api`ディレクトリ内にLaravelがインストールされる
-
-`localhost:80`にアクセスするとLaravelのウェルカムページが表示される
-
-## Next.jsインストール
-
-```sh
-docker-compose exec front yarn create next-app  --typescript .
-
-# 開発用サーバー起動
-docker-compose exec front yarn dev
-```
-
-`front`ディレクトリ内にNext.jsがインストールされる
-
-`localhost:3000`にアクセスするとNext.jsのウェルカムページが表示される
-
-開発用サーバーの停止は`control + c`
-
