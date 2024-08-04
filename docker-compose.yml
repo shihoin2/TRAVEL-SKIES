@@ -8,7 +8,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./front:/app:cached
+      - ./front:/app/src:cached
     stdin_open: true
     tty: true
     depends_on:

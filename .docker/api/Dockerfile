@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-alpine
+FROM php:8.3-fpm-alpine
 
 ENV TZ Asia/Tokyo
 ENV COMPOSER_ALLOW_SUPERUSER 1
@@ -13,7 +13,8 @@ RUN apk update && \
 		zip \
 		unzip \
 		vim \
-		autoconf gcc g++ make
+		autoconf gcc g++ make \
+		linux-headers
 
 # add php-extention-module & xdebug
 RUN docker-php-ext-install mbstring pdo_mysql bcmath && \
@@ -26,7 +27,7 @@ COPY conf/php.ini /usr/local/etc/php/php.ini
 COPY conf/docker.conf /usr/local/etc/php-fpm.d/docker.conf
 
 # install Composer
-COPY --from=composer:2.0 /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2.2.24 /usr/bin/composer /usr/bin/composer
 
 COPY entrypoint.sh /
 RUN chmod +x /entrypoint.sh

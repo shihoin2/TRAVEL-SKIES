@@ -1,4 +1,4 @@
-FROM node:14.17-alpine
+FROM node:20.9-alpine
 
 RUN apk update
 
